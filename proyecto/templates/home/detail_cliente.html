@@ -1,0 +1,25 @@
+
+
+	
+
+			<div id="_appendcliente" class="table table-striped table-condensed">
+<div class="panel panel-primary">
+		
+				<div class="panel-heading">Perfil
+					<p style="float: right;"><a class="btn btn-warning" href="/update_direccion/{{ p.id }}/"><span class="glyphicon glyphicon-edit"></span></a></p>
+				</div>
+				<div class="panel-body">
+			{% for p in cliente%}
+			<h1>
+
+			<p>	Nombre: {{p.first_name}}</p>
+			<p>	apellido: {{p.last_name}}</p>
+			<p>	email: {{p.username}}</p>
+		</h1>
+
+					<td><p><a href="/update_direccion/{{ cliente.id }}/">Actualizar direccion {{p.id}}</a><a href="/delete_direccion/{{ cliente.id }}/">Actualizar direccion {{p.calle}}</a></p></td>
+			</div>
+</div>
+			{% endfor %}
+
+			</div>

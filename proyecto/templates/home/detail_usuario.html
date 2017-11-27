@@ -1,0 +1,19 @@
+
+
+	
+
+			<table id="_appendHere" class="table table-striped table-condensed">
+
+			{% for p in usuario %}
+				<tr>
+
+					<td>
+							<p>{{p.username}}</p>
+
+						<p><a class="btn btn-primary" href="/update_direccion/{{ p.id }}/">Editar direccion</a><a class="btn btn-primary" href="/delete_direccion/{{ p.id }}/">Eliminar direccion </a></p>
+
+					</td>
+				</tr>
+			{% endfor %}
+
+			</table>

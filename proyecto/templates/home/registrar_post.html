@@ -1,0 +1,12 @@
+<form method="POST"  style="align-items: stretch;">
+		
+		{% csrf_token %}
+		{% for el in form %}
+			<div>
+				<label>{{ el.label_tag }}</label>
+			</div>
+			{{el}}
+		{% endfor %}
+			<input type="submit" class="btn btn-success" value="publicar">
+			<input type="reset" class="btn btn-success" name="Cancelar">
+</form>

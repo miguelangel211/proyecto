@@ -1,0 +1,33 @@
+{% extends 'base1.html' %}
+
+{% block content %}
+
+
+
+			{% for p in direcciones%}
+			<div class="col-md-4">
+			<div class="panel panel-primary">
+		
+				<div class="panel-heading">{{p.alias}}
+					<p style="float: right;"><a class="btn btn-warning" href="/update_direccion/{{ p.id }}/"><span class="glyphicon glyphicon-edit"></span></a><a class="btn btn-danger" href="/delete_direccion/{{ p.id }}/"><span class="glyphicon glyphicon-remove"> </a></p>
+				</div>
+				<dir class="panel-body">
+					<h4>
+					<p>calle: {{p.calle}}</p>
+					<p>colonia: {{p.colonia}}</p>
+					<p>numero exterior: {{p.numero_exterior}}</p>
+					<p>cp: {{p.cp}}</p>
+					<p>Referencias: {{p.referencias}}</p>
+				</h4>
+
+				<p>
+					<a  class="btn btn-success btn-justified" href="{% url 'add_direccion' p.id %}">Elegir esta direccion</a>
+				</p>
+					</div>
+					</div>
+				</div>
+
+			{% endfor %}
+
+	
+{% endblock %}

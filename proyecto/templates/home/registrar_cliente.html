@@ -1,0 +1,33 @@
+{% extends 'base1.html' %}
+
+
+{% block forma %}
+<div class="row">
+{% for p in form.non_field_errors %}
+	<div class="alert alert-warning">
+		{{p}}
+	</div>
+	
+{% endfor %}
+<div class="col-sm-4">
+	</div>
+<div class="col-sm-4">
+	<form method="POST"  style="align-items: stretch;">
+		
+		{% csrf_token %}
+		{% for el in form %}
+			<div>
+				<label>{{ el.label_tag }}</label>
+			</div>
+			{{el}}
+		{% endfor %}
+		<div class="btn bt-group-justified">
+			<input type="submit" class="btn btn-success" value="Registrar">
+			<input type="reset" class="btn btn-success" name="Cancelar">
+		<div>
+	</form>
+</div>
+
+<div class="col-sm-4">
+	</div>
+{% endblock %}
