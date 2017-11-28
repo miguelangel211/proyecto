@@ -1,5 +1,4 @@
 from __future__ import unicode_literals
-from urllib import quote_plus
 from django import template
 from django.contrib.auth.models import Group,User
 from django.shortcuts import render
