@@ -174,7 +174,7 @@ def checkout_stripe(cart,orders,token):
 		cart_instance = cart.get()
 		cart_instance.payment_id=charge.id
 		cart_instance.save()
-	except stripe.error.CardError,e:
+	except stripe.error.CardError as e:
 		status=False
 	return status
 
@@ -377,9 +377,9 @@ class Update_cliente(UpdateView):
 		'first_name',
 		'last_name',
 		'password',
-		'email',
 		]
 	success_url=reverse_lazy("cliente_view")
+
 
 
 def asignar_direccion(request):
