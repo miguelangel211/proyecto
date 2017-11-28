@@ -1,0 +1,14 @@
+
+
+update usuario
+
+
+<form method="POST">
+	{% csrf_token %}
+	{{ form.as_p }}
+	<input type="submit" name="Udate">
+	<input type="reset" name="Cancel">
+
+</form>
+
+

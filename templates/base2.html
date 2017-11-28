@@ -1,0 +1,40 @@
+{% load staticfiles %}
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+<script src="/static/jquery-3.2.1.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href={% static 'bootstrap/css/bootstrap.min.css' %}>
+<script src="/static/bootstrap.min.js"></script>
+<script type="text/javascript">
+
+function funcion(nombre){
+	var x=document.getElementById(nombre)
+	if(x.style.display === "none"){
+	x.style.display = "block";
+}else {
+	x.style.display = "none";
+}
+}
+
+
+</script>
+
+
+{% block title %} <title></title> {% endblock %}
+
+
+
+{% block botones %}
+
+
+
+{% endblock %}
+
+
+
+{% block forma %}
+{% endblock %}
+
+{% block content %}
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'base1.html' %}
+{% block content %}
+
+<div class="col-md-8-offset-2 col-sm-12 maincontent">
+	<div style="text-align: center;text-decoration: underline;"><h3>comfirmar orden</h3></div>
+	<div class="cart_container">
+		
+		{% for item in cart %}
+			<div class="cart_listing">
+				<span class="title">{{item.producto.categoria.nombre}}: {{item.producto.articulo}}</span>
+			</div>
+			<div class="cart_price">
+				<span class="cart_quantity">{{item.cantidad}} x<span class="cart_value">{{item.tamano.precio}} + {{item.producto.precio}}</span> </span>
+			</div>
+			{% empty %}
+			<div>
+				Tu carrito esta vacio
+			</div>
+		{% endfor %}
+		<div class="cart_total">
+			<h4>Total $<span class="cart_value">{{total}}</span></h4>
+			<a href="{% url 'complete_order' 'paypal' %}"><input type="submit" id="btn-login" class="btn-success" name="Comprar"></a>
+		</div>
+	</div>
+	
+</div>
+
+
+{% endblock %}

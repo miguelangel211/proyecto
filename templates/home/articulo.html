@@ -1,0 +1,94 @@
+{% extends 'base1.html' %}
+{% load staticfiles %}
+{% block content %}
+<script type="text/javascript">
+
+	function fun(articulo){
+	var yourselect = document.getElementById('tamanos');
+	var actual=yourselect.options[yourselect.selectedIndex].getAttribute('data-foo');
+	var tam=yourselect.options[yourselect.selectedIndex].getAttribute('data-precio');
+
+	var div= document.getElementById('actualtamano');
+		div.setAttribute('href',"{% url 'add_to_cart' articulo.id  2134  %}".replace(/2134/,actual.toString()));
+	var sol= document.getElementById('precio')
+	sol.innerHTML= {{articulo.precio}}+parseInt(tam)
+}
+</script>
+
+<div id="_appendcliente" class="col-md-6" >
+<img src="{{MEDIA_URL}}/{{articulo.imagen}}" width="400" height="400" >
+<p>Precio</p>
+<p id="precio"></p>
+</div>
+
+<div class="col-md-4">
+
+
+			{% if articulo.combinada %}
+
+			<select class="form-control" onchange="fun({{articulo.id}})" id="tamanos">
+			
+			<option value="" selected disabled hidden>Elige un tama;o</option>
+					{% for p in tamano%}
+
+					<option data-foo="{{p.id}}">{{p.tamano}}</option>
+
+					{% endfor %}
+		</select>
+
+
+			<form action="">
+			 <label class="radio-inline"><input type="radio" name="optradio">2 partes</label>
+			<label class="radio-inline"><input type="radio" name="optradio">4 partes</label>
+			</form>
+
+
+
+			<div id="dos ingredientes">
+					<select class="form-control" onchange="fun({{articulo.id}})" id="ingrediente">
+						{% for p in ingredientes%}
+						<option data-foo="{{p.id}}">{{p.articulo}}</option>
+
+						{% endfor %}
+			</select>
+
+			<select class="form-control" onchange="fun({{articulo.id}})" id="ingrediente">
+			{% for p in ingredientes%}
+						<option data-foo="{{p.id}}">{{p.articulo}}</option>
+
+						{% endfor %}
+			</select>
+
+			</div>
+
+						<a class="btn btn-success" id="actualtamano" style="display: block">Agregar al carrito</a>
+
+
+
+
+
+
+
+
+
+
+			{% else %}
+		<select class="form-control" onchange="fun({{articulo.id}})" id="tamanos">
+			
+			<option value="" selected disabled hidden>Elige un tama;o</option>
+					{% for p in tamano%}
+
+					<option data-foo="{{p.id}}" data-precio="{{p.precio}}">{{p.tamano}}</option>
+
+					{% endfor %}
+		</select>
+						<a class="btn btn-success" id="actualtamano" style="display: block">Agregar al carrito</a>
+
+			{% endif %}
+
+
+
+</div>
+{% endblock %}
+
+

@@ -1,0 +1,11 @@
+{% extends 'base1.html' %}
+{% block content %}
+
+			{% for p in menu %}
+			<div class="categoria" >
+			<a href="/articulo/{{p.id}}"><img class="img-circle categoria" src="{{MEDIA_URL}}/{{p.imagen}}" width="300" height="300" ></a>
+			<div class="centered"><h1>{{p.articulo}}</h1></div>
+			</div>
+			{% endfor %}
+
+{% endblock %}

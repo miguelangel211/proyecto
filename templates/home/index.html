@@ -1,0 +1,19 @@
+
+
+
+{% extends 'base1.html' %}
+
+
+
+
+{% block content %}
+
+<div class="middle">
+			{% for p in categoria%}
+			<div class="categoria" >
+			<a href="/menu/{{p.id}}"><img class="img-rounded categoria" src="{{MEDIA_URL}}/{{p.imagen}}" width="450" height="250" ></a>
+			<div class="centered"><h1>{{p.nombre}}</h1></div>
+			</div>
+			{% endfor %}
+</div>
+{% endblock %}

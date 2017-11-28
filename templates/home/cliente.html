@@ -1,0 +1,65 @@
+{% extends 'base1.html' %}
+
+{% load forma %}
+
+
+{% block content %}
+
+
+<div class="col-md-2">
+<ul class="nav nav-pills nav-stacked">
+<li><h1><center>Bienvenido</center></h1></li>
+  <li class="active"><a data-toggle="pill" href="#datos"><span class="fa fa-dashboard"></span> Datos</a></li>
+  <li><a data-toggle="pill" href="#direccion"><span class="fa fa-address-book"></span> Direcciones</a></li>
+  <li><a data-toggle="pill" href="#quejas"><span class="fa fa-commenting"></span> Mis quejas</a></li>
+  <li><a data-toggle="pill" href="#historial"><span class="fa fa-cutlery"></span> Historial de pedidos</a></li>
+</ul>
+</div>
+
+<div class="tab-content">
+
+		<div class="tab-pane fade in active" id="datos">
+		<div class="col-md-8"> 
+				{% detail_cliente %}
+			
+				{% detail_pedidos %}
+		</div>
+		</div>
+
+
+		<div class="tab-pane fade" id="direccion">
+		<div class="col-md-8"> 
+
+				<div class="col-sm-8" style="display:block" id="lista">
+					{% detail_direcciones %}
+				</div>
+				<button  onclick="funcion('direcciones')">Agregar nueva direccion</button>
+				<div class="col-sm-4" style="display:none" id="direcciones"> 
+				{% forma_direccion %}
+				</div>
+		</div>
+		</div>
+
+
+
+		<div class="tab-pane fade" id="quejas">
+		<div class="col-md-8"> 
+
+		{% detail_posts %}
+		</div>
+		</div>
+
+
+		<div class="tab-pane fade" id="historial">
+		<div class="col-md-8"> 
+							{% detail_pedidos_todos %}
+		</div>
+		</div>
+
+
+
+		
+
+
+</div>
+{% endblock %}
