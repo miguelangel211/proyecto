@@ -7,53 +7,66 @@
 {% block content %}
 
 
-<div class="col-lg-2">
+
+<div style="position: fixed" class="col-lg-2">
 <ul class="nav nav-pills nav-stacked">
-<li><h1><center>Bienvenido {{email}}</center></h1></li>
-  <li class="active"><a data-toggle="pill" href="#datos">Datos</a></li>
-  <li><a data-toggle="pill" href="#direccion">Direcciones</a></li>
+<li><h1><center>Bienvenido Administrador</center></h1></li>
+  <li class="active"><a data-toggle="pill" href="#cajeros">Cajeros</a></li>
+  <li><a data-toggle="pill" href="#repartidores">Repartidores</a></li>
   <li><a data-toggle="pill" href="#menu">Menu</a></li>
-  <li><a href="#">Datos</a></li>
 
 
 </ul>
+</div>
+<div class="col-lg-2">
 </div>
 
 <div class="tab-content col-lg-8" >
 
 
-		<div class="tab-pane fade in active" id="datos">
-		<div class="col-md-8"> 
-				{% detail_cliente %}
+		<div class="tab-pane fade in active" id="cajeros">
+
+		<div class="col-sm-8" style="display:block" id="lista">
+					{% detail_cajero %}
 		</div>
+				<div style="position: fixed;right: 100;top: 80px">
+				<button  class="btn btn-success" onclick="funcion('cajero')" >Registar cajero</button>
+				<div style="display:none" class="col-sm-12" id="cajero">
+					{% forma_cajero %}
+				</div>
+				</div>
 		</div>
 
 
 
 
-		<div class="tab-pane " id="direccion">
+		<div class="tab-pane " id="repartidores">
 
 
 				<div class="col-sm-8" style="display:block" id="lista">
 					{% detail_usuario %}
 				</div>
-				<button onclick="funcion('repartidor')" >Registar repartidor</button>
-				<div class="col-sm-4" style="display:none" id="repartidor">
-									{% forma_repartidor %}
+				<div style="position: fixed;right: 100;top: 80px">
+				<button  class="btn btn-success" onclick="funcion('repartidor')" >Registar repartidor</button>
+				<div style="display:none" class="col-sm-12" id="repartidor">
+					{% forma_repartidor %}
+				</div>
 				</div>
 		</div>
-		
+
 
 		<div id="menu" class="tab-pane">
-	 
+
 
 				<div class="col-sm-8" style="display:block" id="lista2">
 					{% detail_categorias %}
 				</div>
-				<button onclick="funcion('repartidor2')" >Registar repartidor</button>
-				<div class="col-sm-4" style="display:none" id="repartidor2">
+				<div style="position: fixed;right: 100;top: 80px">
+				<button  class="btn btn-success" onclick="funcion('repartidor2')" >Registar categoria</button>
+				<div class="col-sm-8" style="display:none" id="repartidor2">
 				{% forma_categoria %}
 				</div>
+			</div>
 
 		</div>
 

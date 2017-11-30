@@ -2,12 +2,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-<script src="/static/jquery-3.2.1.min.js"></script>
-
 <link rel="stylesheet" type="text/css" href={% static 'bootstrap/css/bootstrap.min.css' %}>
-<script src="/static/bootstrap.min.js"></script>
-<script type="text/javascript">
+<link rel="stylesheet"  href={% static 'font-awesome-4.7.0/css/font-awesome.min.css' %}>
+<link rel="stylesheet"  href={% static 'DataTables-1.10.16/css/dataTables.bootstrap.min.css' %}>
+<script src="/static/jquery-3.2.1.min.js"></script>
+<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+<script src="/static/checkout.js"></script>
+<script src="/static/jquery.cookie.js"></script>
+<script src="/static/DataTables-1.10.16/js/jquery.dataTables.min.js"></script>
+<script src="/static/DataTables-1.10.16/js/dataTables.bootstrap.min.js"></script>
 
+<script type="/static/font-awesome-4.7.0/css/font-awesome.min.css"></script>
+<script type="text/javascript">
 function funcion(nombre){
 	var x=document.getElementById(nombre)
 	if(x.style.display === "none"){
@@ -20,6 +26,45 @@ function funcion(nombre){
 
 </script>
 
+<script>
+$('#tablarepartidores').on('click', '.clickable-row', function(event) {
+  $(this).addClass('active').siblings().removeClass('active');
+});
+</script>
+{% block nav %}
+    <div class="">
+      <nav class="navbar navbar-default ">
+        <div class="container-fluid">
+          <div class="navbar-header">
+
+          </div>
+
+          <ul class="nav navbar-nav">
+            {% block menu %}
+              <li class=""><a data-toggle="pill" href="#tab1"></a></li>
+              <li class=""><a data-toggle="pill" href="#tab2"></a></li>
+              <li class=""><a data-toggle="pill" href="#tab3"></a></li>
+              <li class=""><a data-toggle="pill" href="#tab4"></a></li>
+            {% endblock %}
+          </ul>
+
+          <ul class="nav navbar-nav navbar-right">
+            {% block registro %}
+            {% if user.is_authenticated %}
+
+            <li><a href="{% url 'cliente_view' %}""><span class="glyphicon glyphicon-user">{{user.first_name}} {{user.last_name}}</span></a></li>
+            <li><a href="{% url 'logout_view' %}"><span class="glyphicon glyphicon-log-out">Salir</span></a>
+
+            {% else %}
+            <li><a href="{% url 'registrar_cliente' %}""><span class="glyphicon glyphicon-user">Registrarse</span></a></li>
+            <li><a href="{% url 'login' %}"><span class="glyphicon glyphicon-log-in">Login</span></a></li>
+            {% endif %}
+            {% endblock %}
+          </ul>
+        </div>
+      </nav>
+    </div>
+    {% endblock %}
 
 {% block title %} <title></title> {% endblock %}
 

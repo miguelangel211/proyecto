@@ -1,13 +1,20 @@
 			
-			
-			<div id="_appendcliente" class="table table-striped table-condensed">
 
-			{% for p in categorias%}
-			<h1>
-			<p><a href="/producto_categorias/{{p.id}}" class="btn btn-success">{{p.nombre}}</a></p>
-		</h1>
+			{% for p in categorias %}
+			<div class="col-md-11">
+			<div class="panel panel-primary">
+		
+				<div class="panel-heading">{{p.nombre}}
+					<p style="float: right;"><a class="btn btn-warning" href="/update_categoria/{{ p.id }}/"><span class="glyphicon glyphicon-edit"></span></a><a class="btn btn-danger" href="/delete_categoria/{{ p.id }}/"><span class="glyphicon glyphicon-remove"></span> </a></p>
+				</div>
+				<div class="panel-body">
+			<img class="img-rounded categoria" src="/media/{{p.imagen}}" width="440" height="250" >
 
-					<td><p><a href="/update_direccion/{{ cliente.id }}/">Actualizar direccion {{p.id}}</a><a href="/delete_direccion/{{ cliente.id }}/">eliminar categoria </a></p></td>
+			<p><a href="/producto_categorias/{{p.id}}" class="btn btn-success">Productos en {{p.nombre}}</a></p>
 
+	
+</div>
+</div>
+</div>
 			{% endfor %}
 

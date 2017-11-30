@@ -1,16 +1,20 @@
 
-<table class="table">
+
+<table class="table" id="todospedidos" width="100%">
     <thead>
   <tr class="info">
-      		<td>Num pedido</td>
+      		<td># pedido</td>
       		<td> Datos de Pedido</td>
     		<td>Monto</td>
     		<td>Metodo de pago</td>
     		<td>Direccion</td>
     		<td>estado</td>
+    		<td></td>
     	</tr>
-			{% for p in pedidos%}
+    			</thead>
+<tbody>
 
+			{% for p in pedidos%}
 
 				<tr>
 
@@ -101,6 +105,6 @@
 
 				</tr>
 			{% endfor %}
-		</thead>
+		</tbody>
 
 </table>

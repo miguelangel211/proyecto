@@ -8,12 +8,12 @@
 		{% for item in cart %}
 		<div class="cart-item">
 			<div class="cart-listing">
-				<span class="title">{{item.producto.articulo}}</span>
+				<span class="title"><h2>{{item.producto.articulo}}</h2></span>
 			</div>
 			<div class="cart-price">
-				<span class="cart-quantity">{{item.cantidad}} x $<span class="cart-value">{{item.producto.precio}}</span></span>
-				tamano {{item.tamano.tamano}}
-				cantidad: <a href="{% url 'add_to_cart' item.producto.id item.tamano.id %}"><span class="glyphicon glyphicon-plus"></span></a>/<a href="{% url 'remove_from_cart' item.producto.id item.tamano.id %}"><span class="glyphicon glyphicon-minus"></span></a>
+				<span class="cart-quantity">{{item.cantidad}} x $<span class="cart-value">{{item.producto.precio}}+ {{item.tamano.precio}}</span></span>
+				
+				cantidad:  <a href="{% url 'add_to_cart' item.producto.id item.tamano.id %}"><span class="glyphicon glyphicon-plus"></span></a>/<a href="{% url 'remove_from_cart' item.producto.id item.tamano.id %}"><span class="glyphicon glyphicon-minus"></span></a>
 			</div>
 		</div>
 		{% empty %}

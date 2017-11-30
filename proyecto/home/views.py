@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django.contrib.auth.models import Group,User
 from django.shortcuts import render,redirect
 from django.views.generic import CreateView, FormView, ListView, DetailView,UpdateView,DeleteView
-from .forms import Usuario_form, Cliente_form, comentario_form
+from .forms import Usuario_form, Cliente_form, comentario_form,menu_form,tamano_form
 from .models import *
 from django.core.urlresolvers import reverse_lazy,reverse
 from django.core.exceptions import ObjectDoesNotExist
@@ -174,7 +174,7 @@ def checkout_stripe(cart,orders,token):
 		cart_instance = cart.get()
 		cart_instance.payment_id=charge.id
 		cart_instance.save()
-	except stripe.error.CardError,e:
+	except stripe.error.CardError as e:
 		status=False
 	return status
 
@@ -182,6 +182,19 @@ def checkout_stripe(cart,orders,token):
 class requestDeleteView(DeleteView):
 	model=Direcciones
 	success_url='/cliente/#direcciones'
+class delete_usuario(DeleteView):
+	model=User
+	success_url='/administrador/'
+class delete_categoria(DeleteView):
+	model=categoria
+	success_url='/administrador/#menu'
+class delete_producto(DeleteView):
+	model=menu
+	success_url='/administrador/#menu'
+
+class delete_tamano(DeleteView):
+	model=tamanos
+	success_url='/administrador/#menu'
 
 def index(request):
 	p=categoria.objects.raw('SELECT * FROM home_categoria')
@@ -265,7 +278,7 @@ def cart(request):
 			total=0
 			count=0
 			for order in orders:
-				total +=(order.producto.precio * order.cantidad)
+				total +=((order.producto.precio+order.tamano.precio) * order.cantidad)
 				count += order.cantidad
 			context={
 			'cart': orders,
@@ -282,12 +295,22 @@ def cart(request):
 
 
 def producto_categorias(request,pk):
-	id_producto=pk
-	return render(request,'home/productos.html',{'pk':id_producto})
+	p = categoria.objects.get(id=pk)
+	form=menu_form(request.POST or None,request.FILES)
+	if form.is_valid():
+		dire=form.save(commit=False)
+		dire.categoria=p
+		dire.save()
+	return render(request,'home/productos.html',{'pk':pk})
 
 def tamanos_producto(request,pk):
-	id_producto=pk
-	return render(request,'home/tamanos.html',{'pk':id_producto})
+	p=menu.objects.get(id=pk)
+	form=tamano_form(request.POST or None)
+	if form.is_valid():
+		dire=form.save(commit=False)
+		dire.articulo=p
+		dire.save()
+	return render(request,'home/tamanos.html',{'pk':pk})
 
 def direcciones(request):
 	u=str(request.user.username)
@@ -339,9 +362,24 @@ def registrar_usuario(request):
 	return render(request, 'home/registrar_usuario.html',{"form":form})
 
 def administrador(request):
-	if not request.user.groups.filter(name="administrador"):
-		return redirect('cliente_view')
-	return render(request,'home/administrador.html')
+	if request.user.groups.filter(name="administrador"):
+		form=Usuario_form(request.POST or None)
+		if form.is_valid():
+			user=form.save(commit=False)
+			password = form.cleaned_data.get('password')
+			groups = request.POST.get('grupo','')
+			user.set_password(password)
+			user.save()
+			if groups=="Repartidor":
+				caja_repartidor.objects.create(usuario=user)
+				repartidor.objects.create(usuario=user)
+			g=Group.objects.get(name=groups)
+			g.user_set.add(user)
+		return render(request,'home/administrador.html')
+	else:
+		return redirect('cajero')
+
+
 
 def registrar_cliente(request):
 	title="Registrar"
@@ -354,6 +392,7 @@ def registrar_cliente(request):
 		user.save()
 		g=Group.objects.get(name=groups)
 		g.user_set.add(user)
+		return redirect('login')
 	return render(request, 'home/registrar_cliente.html',{"form":form})
 
 class Update_direccion(UpdateView):
@@ -377,9 +416,37 @@ class Update_cliente(UpdateView):
 		'first_name',
 		'last_name',
 		'password',
-		'email',
 		]
 	success_url=reverse_lazy("cliente_view")
+
+class Update_repartidor(UpdateView):
+	template_name="home/update_cliente.html"
+	model = User
+	fields=[
+		'first_name',
+		'last_name',
+		'password',
+		'email'
+		]
+	success_url=reverse_lazy("administrador")
+
+class Update_categoria(UpdateView):
+	template_name="home/update_cliente.html"
+	model = categoria
+	fields="__all__"
+	success_url=reverse_lazy("administrador/#menu")
+
+class Update_producto(UpdateView):
+	template_name="home/update_cliente.html"
+	model = menu
+	fields="__all__"
+	success_url=reverse_lazy("administrador/#menu")
+
+class Update_tamano(UpdateView):
+	template_name="home/update_cliente.html"
+	model = tamanos
+	fields="__all__"
+	success_url=reverse_lazy("administrador/#menu")
 
 
 def asignar_direccion(request):
@@ -389,3 +456,84 @@ def asignar_direccion(request):
 def lista_compras(request,id_cart):
 	p=productocarro.objects.raw('SELECT * FROM home_productocarro where cart_id=%s',[id_cart])
 	return render(request,'home/detail_articulos.html',{'articulos':p})
+def cajero(request):
+	if request.user.groups.filter(name="Cajero"):
+		grupo='Repartidor'
+		p=User.objects.raw('SELECT * FROM auth_user join auth_user_groups on auth_user.id=user_id join auth_group on group_id=auth_group.id where auth_group.name=%s',[grupo])
+		context={
+		'repartidores':p
+		}
+		return render(request,'home/cajero.html',context)
+	else:
+		return redirect('repartidor')
+
+def add_to_caja(request,id_repartidor,id_cart):
+	if request.user.is_authenticated():
+		us=User.objects.get(pk=id_repartidor)
+		caja=caja_repartidor.objects.get(usuario=us)
+		caja.add_to_caja(id_cart)
+		return redirect('cajero')
+	else:
+		return redirect('index_view')
+
+def remove_from_caja(request,id_cart):
+	if request.user.is_authenticated():
+		cart=Cart.objects.get(pk=id_cart)
+		cart.algo="proceso"
+		cart.caja=None
+		cart.save()
+		return redirect('cajero')
+	else:
+		return redirect('index_view')
+
+def completar_orden(request,id_cart):
+	if request.user.is_authenticated():
+		cart=Cart.objects.get(pk=id_cart)
+		cart.algo="completado"
+		cart.caja=None
+		cart.save()
+		return redirect('repartidor')
+	else:
+		return redirect('cajero')
+
+def problema_orden(request,id_cart):
+	if request.user.is_authenticated():
+		cart=Cart.objects.get(pk=id_cart)
+		cart.algo="fallo"
+		cart.caja=None
+		cart.save()
+		return redirect('repartidor')
+	else:
+		return redirect('cajero')
+
+
+
+def repartidor(request):
+	if request.user.groups.filter(name="Repartidor"):
+		q=caja_repartidor.objects.get(usuario=request.user)
+		recibido='Enviado'
+		p = Cart.objects.filter(caja=q,active=0,algo="Enviado")
+		return render(request,'home/repartidor.html',{'pedidos':p})
+	else:
+		return redirect('cliente_view')
+
+def hilo(request,id_post):
+	if request.user.is_authenticated():
+		com=comentario.objects.get(pk=id_post)
+		form=comentario_form(request.POST or None)
+		if form.is_valid():
+			post=form.save(commit=False)
+			post.usuario=request.user
+			try:
+				papa=comentario.objects.get(pk=request.POST.get("parent_id"))
+				post.parent=papa
+			except:
+				pass
+			post.save()
+		context={
+		"form":form,
+		"p":com
+		}
+		return render(request,'home/hilo.html',context)
+	else:
+		return redirect('index')

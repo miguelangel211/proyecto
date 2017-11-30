@@ -1,12 +1,21 @@
+{% extends 'base2.html'%}
+
 {%  load forma %}
-<div id="_appendcliente" class="table table-striped table-condensed">
+{% block content %}
+
 
 			{% for p in productos%}
-			<h1>
-			<p><a href="/tamanos_producto/{{p.id}}" class="btn btn-success">{{p.tamano}}</a></p>
-		</h1>
+			<div class="panel panel-primary">
+		
+				<div class="panel-heading">{{p.tamano}}
+					<p style="float: right;"><a class="btn btn-warning" href="/update_tamano/{{ p.id }}/"><span class="glyphicon glyphicon-edit"></span></a><a class="btn btn-danger" href="/delete_tamano/{{ p.id }}/"><span class="glyphicon glyphicon-remove"></span> </a></p>
+				</div>
+				<div class="panel-body">
 
-					<td><p><a href="/update_direccion/{{ cliente.id }}/">Actualizar direccion {{p.id}}</a><a href="/delete_direccion/{{ cliente.id }}/">eliminar categoria </a></p></td>
-	{{p.id}}
+	<p>precio:{{p.precio}}</p>
+	<p>Descripcion: {{p.descripcion}}</p>
+</div>
+</div>
 			{% endfor %}
 
+{% endblock %}

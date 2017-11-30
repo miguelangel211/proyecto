@@ -1,0 +1,90 @@
+{% extends 'base2.html'%}
+
+{% block content %}
+<div>
+	<h1>Pedidos Asignados</h1>
+</div>
+<table class="table" id="pedidosenviados" width="100%">
+    <thead>
+  <tr class="info">
+      		<td># pedido</td>
+      		<td>Usuario</td>
+      		<td> Datos de Pedido</td>
+    		<td>Monto</td>
+    		<td>Metodo de pago</td>
+    		<td>Direccion</td>
+    		<td>Marcar entrega</td>
+    		<td>Entrega Fallida</td>
+    	</tr>
+    			</thead>
+<tbody>
+
+			{% for p in pedidos%}
+
+				<tr>
+
+					<td id="row">
+					{{p.id}}
+					</td>
+					<td>
+						{{p.user.username}}
+					</td>
+					<td>
+
+	<a class="btn btn-primary" href="/lista_compras/{{p.id}}/"><span class="glyphicon glyphicon-list-alt"></span></a>
+
+
+					</td>
+					<td>
+					{{p.total}}
+					</td>
+					<td>
+						{{p.payment_type}}
+					</td>
+								<td>
+						<button type="button" style="float: left" class="btn btn-primary btn-md" data-toggle="modal" data-target="#myModal{{p.id}}">Direccion</button></td>
+					
+					<td>
+				<a  style="float: left" class="btn btn-primary btn-md" href="{% url 'completar_orden' p.id %}"><span class="glyphicon glyphicon-minus"></span></a>
+					</td>
+
+
+					<td><a  style="float: left" class="btn btn-primary btn-md" href="{% url 'problema_orden' p.id %}"><span class="glyphicon glyphicon-minus"></span></a></td>
+
+
+				</tr>
+
+				
+		<div id="myModal{{p.id}}" class="modal fade" role="dialog">
+		  <div class="modal-dialog">
+
+		    <!-- Modal content-->
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal">&times;</button>
+		        <h4 class="modal-title">Direccion de entrega {{p.direccion.alias}}
+</h4>
+		      </div>
+		      <div class="modal-body" id="aqui">
+		   		<p>	Calle: {{p.direccion.calle}}</p>
+		   		<p>	Colonia: {{p.direccion.colonia}}</p>
+		   		<p>	Numero exterior: {{p.direccion.numero_exterior}}</p>
+		   		<p>	Numero interior: {{p.direccion.numero_interior}}</p>
+		   		<p>	C.P.: {{p.direccion.cp}}</p>
+		   		<p>	Referencias: {{p.direccion.referencias}}</p>
+
+		     </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		      </div>
+		    </div>
+
+		  </div>
+		</div>
+
+			{% endfor %}
+		</tbody>
+
+</table>
+
+{% endblock %}

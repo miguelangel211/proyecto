@@ -9,7 +9,7 @@
 {% endfor %}
 
 
-	<form method="POST"  style="align-items: stretch;">
+	<form enctype="multipart/form-data" method="POST"  style="align-items: stretch;">
 		
 		{% csrf_token %}
 		{% for el in form %}
@@ -17,7 +17,9 @@
 				<label>{{ el.label_tag }}</label>
 
 			{{el}}
+
 		{% endfor %}
+
 			<input type="submit" class="btn btn-success" value="Registrar">
 			<input type="reset" class="btn btn-success" name="Cancelar">
 	</form>

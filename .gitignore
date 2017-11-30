@@ -1,5 +1,6 @@
 *.pyc
 __pycache__
 web
+myenv
 db.sqlite3
 .DS_Store

@@ -1,0 +1,20 @@
+			<table class="table table-borderedproceso" id="tablarepartidoresactivos">
+				<thead>
+
+				<tr>
+					<td>id</td>
+					<td>Nombre</td>
+				</tr>
+			</thead>
+			<tbody>
+
+				{% for i in repartidores %}
+				<tr data-href="#" class="clickable-row">
+					<td>{{i.id}}</td>
+					<td>{{i.first_name}} {{i.last_name}}</td>
+
+				</tr>
+				{% endfor %}
+			</tbody>
+
+			</table>

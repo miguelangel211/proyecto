@@ -1,9 +1,55 @@
 {% extends 'base2.html' %}
 {% load forma %}
-
 {% block content %}
+<div>
+	<ul class="pagination pagination-sm">
+		<li>
+			<a href="/administrador/#menu">Administrador</a>
+		</li>
+
+	</ul>
+</div>
+
+<div class="col-md-8">
 {% detail_tamano id_producto=pk %}
-hola maquina
+</div>
+<div class="col-md-4">
+<button type="button" style="float: right;right: 100;top: 0" class="btn btn-success btn-md" data-toggle="modal" data-target="#mypedidos">Agregar un producto</button>
+					</td>
+</div>
+
+
+
+
+
+
+
+<div id="mypedidos" class="modal fade" role="dialog">
+		  <div class="modal-dialog">
+
+		    <!-- Modal content-->
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal">&times;</button>
+		        <h4 class="modal-title">Agregar un tamano
+</h4>
+		      </div>
+		      <div class="modal-body" id="aqui">
 {% forma_tamano producto_id=pk %}
+
+		      			     </div>
+		      	
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		      </div>
+		    </div>
+
+		  </div>
+		</div>
+
+
+
+
+
 
 {% endblock %}

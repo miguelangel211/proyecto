@@ -3,8 +3,8 @@
 
 			{% for p in menu %}
 			<div class="categoria" >
-			<a href="/articulo/{{p.id}}"><img class="img-circle categoria" src="{{MEDIA_URL}}/{{p.imagen}}" width="300" height="300" ></a>
-			<div class="centered"><h1>{{p.articulo}}</h1></div>
+			<a href="/articulo/{{p.id}}"><img class="img-rounded categoria" src="{{MEDIA_URL}}/{{p.imagen}}" width="440" height="225" ></a>
+			<div  style="background: rgba(54,25,25,.5);" class="centered"><h1>{{p.articulo}}</h1><p>{{p.descripcion}}</p></div>
 			</div>
 			{% endfor %}
 

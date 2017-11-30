@@ -1,0 +1,119 @@
+{% extends 'base2.html' %}
+
+{% load forma %}
+
+
+{% block content %}
+
+<script>
+	var pedido;
+	var repartidor;
+	$(document).ready(function(){
+		
+$('#pedidosenviados').DataTable();
+$('#todospedidos').DataTable();
+$('#tablapedidos').DataTable();
+$('#tablarepartidoresactivos').on('click', '.clickable-row', function(event) {
+  $(this).addClass('active').siblings().removeClass('active');
+  repartidor=$(this).find("td").eq(0).text()  
+  $('#addtocaja').attr("href",("{% url 'add_to_caja' 0 1 %}").replace('0/1',repartidor+'/'+pedido));
+});
+
+$('#tablapedidos').on('click', '.clickable-row', function(event) {
+  $(this).addClass('active').siblings().removeClass('active');
+  pedido=$(this).find("td").eq(0).text()
+  $('input[name=pedido]').val(pedido);
+  $('#addtocaja').attr("href","{% 'add_to_caja' pedido");
+});
+
+
+$('#tablarepartidoresnodisponibles').on('click', '.clickable-row', function(event) {
+  $(this).addClass('active').siblings().removeClass('active');
+});
+
+
+});
+</script>
+
+<div class="col-md-2">
+<ul class="nav nav-pills nav-stacked">
+<li><h1><center>Bienvenido</center></h1></li>
+  <li class="active"><a data-toggle="pill" href="#datos"><span class="fa fa-dashboard"></span> Datos</a></li>
+  <li><a data-toggle="pill" href="#direccion"><span class="fa fa-address-book"></span> Enviados</a></li>
+  <li><a data-toggle="pill" href="#quejas"><span class="fa fa-commenting"></span> Quejas</a></li>
+  <li><a data-toggle="pill" href="#historial"><span class="fa fa-cutlery"></span> Historial de pedidos</a></li>
+</ul>
+</div>
+
+<div class="tab-content">
+
+		<div class="tab-pane fade in active" id="datos">
+		<div class="col-md-8"> 
+			<h3>Pedidos para entregar</h3>
+				{% detail_pedidos_cajero_proceso %}
+		</div>
+<div class="col-md-2">
+<button type="button" style="float: left" class="btn btn-success btn-md" data-toggle="modal" data-target="#asignar">Asignar</button>
+</div>
+
+</div>
+
+		<div class="tab-pane fade" id="direccion">
+		<div class="col-md-8"> 
+{%detail_pedidos_cajero_enviados%}		</div>
+		</div>
+
+
+
+		<div class="tab-pane fade" id="quejas">
+		<div class="col-md-8"> 
+
+		{% detail_posts_caja %}
+		</div>
+		</div>
+
+
+		<div class="tab-pane fade" id="historial">
+		<div class="col-md-8"> 
+							{% detail_pedidos_todos %}
+		</div>
+		</div>
+
+
+
+		
+
+
+</div>
+
+
+
+
+<div id="asignar" class="modal fade" role="dialog">
+		  <div class="modal-dialog">
+
+		    <!-- Modal content-->
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal">&times;</button>
+		        <h4 class="modal-title">Repartidores
+</h4>
+		      </div>
+		      <div class="modal-body" id="aqui">
+	
+
+					{% detail_repartidores_activos %}
+		
+
+			<a class="btn btn-success" id="addtocaja" href="">Asignar</a>
+
+		      			     </div>
+		      	
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		      </div>
+		    </div>
+
+		  </div>
+		</div>
+{% endblock %}

@@ -1,4 +1,11 @@
+{% extends 'base2.html'%}
+{% block content %}
+<div class="col-md-4"></div>
+<div class="col-md-4">
 <form method="POST">{% csrf_token %}
-	Seguro de que deseas eliminar la direccion
-<input type="submit" value="submit">
+<p>	Seguro de que deseas eliminar este elemento</p>
+<input class="form-control" type="submit" value="submit"><span class="glyhpicon glyhpicon-warning-sign form-control-feedback"></span>
 </form>
+</div>
+<div class="col-md-4"></div>
+{% endblock %}

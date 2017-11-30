@@ -1,0 +1,24 @@
+
+{% block forma %}
+
+{% for p in form.non_field_errors %}
+	<div class="alert alert-warning">
+		{{p}}
+	</div>
+	
+{% endfor %}
+
+	<form method="POST"  style="align-items: stretch;">
+		
+		{% csrf_token %}
+		{% for el in form %}
+				<label>{{ el.label_tag }}</label>
+			{{el}}
+		{% endfor %}
+		<input type="hidden" name="grupo" value="Repartidor">
+			<input type="submit" class="btn btn-success" value="Registrar">
+			<input type="reset" class="btn btn-success" name="Cancelar">
+		
+	</form>
+
+{% endblock %}

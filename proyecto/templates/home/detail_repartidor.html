@@ -1,0 +1,21 @@
+
+			{% for p in usuario %}
+					<div class="col-md-10">
+			<div class="panel panel-primary">
+		
+				<div class="panel-heading"> Repartidor : {{p.id}}
+					<div style="float: right;"><a class="btn btn-warning" href="/update_repartidor/{{ p.id }}/"><span class="glyphicon glyphicon-edit"></span></a><a class="btn btn-danger" href="/delete_usuario/{{ p.id }}/"><span class="glyphicon glyphicon-remove"></span> </a></div>
+				</div>
+				<div class="panel-body">
+			
+							<p>Usuario: {{p.username}}</p>
+							<p>Nombre: {{p.first_name}}</p>
+							<p>Apellidos: {{p.last_name}}</p>
+							<p>Correo: {{p.email}}</p>
+
+					</div>
+				</div>
+			</div>
+
+			{% endfor %}
+

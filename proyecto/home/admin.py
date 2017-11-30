@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.contrib import admin
-from .models import Direcciones,categoria,menu,tamanos,productocarro,Cart,ingredientes,comentario
+from .models import *
 
 
 admin.site.register(Direcciones)
@@ -13,3 +13,7 @@ admin.site.register(productocarro)
 admin.site.register(Cart)
 admin.site.register(ingredientes)
 admin.site.register(comentario)
+admin.site.register(pedido_repartidor)
+admin.site.register(repartidor)
+admin.site.register(caja_repartidor)
+

@@ -12,7 +12,7 @@ class sucursal(models.Model):
 	calle=models.CharField(max_length=30)
 	numero_exterior=models.CharField(max_length=30)
 	numero_interior=models.CharField(max_length=30,blank=True,null=True)
-	Referencias=models.CharField(max_length=30,blank=True,null=True)
+	Referencias=models.CharField(max_length=100,blank=True,null=True)
 	cp=models.CharField(max_length=30)
 	colonia=models.CharField(max_length=30)
 	telefono=models.CharField(max_length=15)
@@ -29,17 +29,31 @@ class Usuario(models.Model):
 	celular=models.CharField(max_length=15,blank=True,null=True)
 
 
-
-	
-class empleado(models.Model):
+class repartidor(models.Model):
 	usuario=models.OneToOneField(User, on_delete=models.CASCADE)
-	sucursal=models.ForeignKey(sucursal, on_delete=models.CASCADE)
+	trabajando=models.BooleanField(default=False)
+	disponibilidad=models.BooleanField(default=False)
 
+class caja_repartidor(models.Model):
+	usuario=models.OneToOneField(User, on_delete=models.CASCADE)
+	def add_to_caja(self,cart_id):
+		cart=Cart.objects.get(pk=cart_id)
+		cart.algo="Enviado"
+		cart.caja=self
+		cart.save()
+	def remove_from_caja(self,cart_id):
+		cart=Cart.objects.get(pk=cart_id)
+		try:
+			cart.caja=None
+			cart.algo="proceso"
+			cart.save() 
+		except:
+			pass
 
 class Direcciones(models.Model):
 	alias=models.CharField(max_length=50,null=True)
 	usuario = models.ForeignKey(User,on_delete=models.CASCADE)
-	calle=models.CharField(max_length=30)
+	calle=models.CharField(max_length=100)
 	numero_exterior=models.CharField(max_length=30)
 	numero_interior=models.CharField(max_length=30,blank=True,null=True)
 	referencias=models.CharField(max_length=30,blank=True,null=True)
@@ -49,10 +63,14 @@ class Direcciones(models.Model):
 class categoria(models.Model):
 	nombre= models.CharField(max_length=30,unique=True)
 	imagen=models.ImageField(null=True)
+	def url(self):
+		if self.imagen and hasattr(self.imagen, 'url'):
+			return self.imagen.url	
 
 class menu(models.Model):
 	categoria=models.ForeignKey(categoria,on_delete=models.CASCADE,default=True)
 	articulo= models.CharField(max_length=30)
+	descripcion=models.CharField(max_length=100,null=True)
 	precio=models.PositiveIntegerField(default=0)
 	imagen=models.ImageField(upload_to='menu')
 	combinada=models.BooleanField(default=False)
@@ -74,14 +92,10 @@ class pedido(models.Model):
 	estado=models.PositiveIntegerField()
 	costo=models.DecimalField(max_digits=9, decimal_places=2)
 
-class Repartidor(models.Model):
-	Usuario=models.OneToOneField(User, on_delete=models.CASCADE)
 
 
 
-class pedido_repartidor(models.Model):
-	Usuario=models.OneToOneField(User, on_delete=models.CASCADE)
-	num_pedido=models.PositiveIntegerField(unique=True)
+
 
 #class ofertas(models.Model):
 #	oferta=models.PositiveIntegerField()
@@ -105,6 +119,8 @@ class Cart(models.Model):
 	total=models.PositiveIntegerField(null=True)
 	direccion=models.ForeignKey(Direcciones,null=True)
 	algo=models.CharField(max_length=34,null=True)
+	caja=models.ForeignKey(caja_repartidor,null=True)
+	fallo=models.CharField(max_length=200,null=True)
 	def add_to_cart(self,producto_id,id_tamano):
 		producto=menu.objects.get(pk=producto_id)
 		tamano=tamanos.objects.get(pk=id_tamano)
@@ -155,6 +171,9 @@ class Cart(models.Model):
 		self.save()
 
 
+class pedido_repartidor(models.Model):
+	Usuario=models.ForeignKey(User, on_delete=models.CASCADE)
+	cart=models.ForeignKey(Cart,on_delete=models.CASCADE,null=True)
 
 class productocarro(models.Model):
 	producto=models.ForeignKey(menu)

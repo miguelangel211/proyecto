@@ -38,19 +38,18 @@ def registrar_cliente(context):
 		g.user_set.add(user)
 	return ({"form":form})
 
-@register.inclusion_tag('home/registrar_usuario.html',name='forma_repartidor',takes_context=True)
+@register.inclusion_tag('home/registrar_repartidor.html',name='forma_repartidor',takes_context=True)
 def registrar_repartidor(context):
 	request = context['request']
 	title="Registrar"
-	form=Usuario_form(request.POST or None)
-	if form.is_valid():
-		user=form.save(commit=False)
-		password = form.cleaned_data.get('password')
-		groups = 'Repartidor'
-		user.set_password(password)
-		user.save()
-		g=Group.objects.get(name=groups)
-		g.user_set.add(user)
+	form=Usuario_form()
+	return ({"form":form})
+
+@register.inclusion_tag('home/registrar_usuario.html',name='forma_cajero',takes_context=True)
+def registrar_cajero(context):
+	request = context['request']
+	title="Registrar"
+	form=Usuario_form()
 	return ({"form":form})
 
 @register.inclusion_tag('home/direccion.html',name='forma_direccion',takes_context=True)
@@ -67,22 +66,17 @@ def registrar_direccion(context):
 @register.inclusion_tag('home/direccion.html',name='forma_categoria',takes_context=True)
 def registrar_categoria(context):
 	request = context['request']
-	title="categorias"
-	form=categoria_form(request.POST or None)
+	title="Registrar"
+	form=categoria_form(request.POST or None,request.FILES)
 	if form.is_valid():
-		dire=form.save(commit=False)
-		dire.save()
+		form.save()
 	return ({"form":form})
 
 @register.inclusion_tag('home/tamano.html',name='forma_tamano',takes_context=True)
 def registrar_tamano(context,producto_id):
 	request = context['request']
 	title="categorias"
-	form=tamano_form(request.POST or None)
-	if form.is_valid():
-		dire=form.save(commit=False)
-		dire.articulo=menu.objects.get(pk=producto_id)
-		dire.save()
+	form=tamano_form()
 	return ({"form":form})
 
 @register.inclusion_tag('home/producto.html',name='forma_producto',takes_context=True)
@@ -90,11 +84,7 @@ def registrar_producto(context,id_categoria):
 	p = categoria.objects.get(id=id_categoria)
 	request = context['request']
 	title="categorias"
-	form=menu_form(request.POST or None,request.FILES)
-	if form.is_valid():
-		dire=form.save(commit=False)
-		dire.categoria=p
-		dire.save()
+	form=menu_form()
 	return ({"form":form})
 
 @register.inclusion_tag('home/detail.html',name='detail_direcciones',takes_context=True)
@@ -124,10 +114,16 @@ def show_pedidos(context):
 	p = Cart.objects.raw('SELECT * FROM home_cart where active=0 and user_id=%s',[request.user.id])
 	return{'pedidos':p}
 
-@register.inclusion_tag('home/detail_pedidos.html',name='detail_pedidos_todos',takes_context=True)
+@register.inclusion_tag('home/detail_pedidos_todos.html',name='detail_pedidos_todos',takes_context=True)
 def show_pedidos(context):
 	request=context['request']
-	p = Cart.objects.raw('SELECT * FROM home_cart where active=0 and user_id=%s',[request.user.id])
+	p = Cart.objects.filter(active=0)
+	return{'pedidos':p}
+
+@register.inclusion_tag('home/detail_pedidos_todos.html',name='detail_pedidos_todos_por_usuario',takes_context=True)
+def show_pedidos(context):
+	request=context['request']
+	p = Cart.objects.filter(active=0, user=request.user)
 	return{'pedidos':p}
 
 @register.inclusion_tag('home/detail_productos.html',name='detail_producto',takes_context=True)
@@ -151,6 +147,13 @@ def show_datos_usuarios(context):
 	p = User.objects.raw('SELECT * FROM auth_user join auth_user_groups on auth_user.id=auth_user_groups.user_id join auth_group on auth_user_groups.group_id=auth_group.id where auth_group.name= %s',[u])
 	return{'usuario':p}
 
+@register.inclusion_tag('home/detail_usuario.html',name='detail_cajero',takes_context=True)
+def show_datos_usuarios(context):
+	request=context['request']
+	u='Cajero'
+	p = User.objects.raw('SELECT * FROM auth_user join auth_user_groups on auth_user.id=auth_user_groups.user_id join auth_group on auth_user_groups.group_id=auth_group.id where auth_group.name= %s',[u])
+	return{'usuario':p}
+
 @register.filter(name='detail_articulos')
 def show_articulos(id_cart):
 	p=productocarro.objects.raw('SELECT * FROM home_productocarro where cart_id=%s'[id_cart])
@@ -169,9 +172,62 @@ def registrar_post(context):
 	return ({"form":form})
 
 
+@register.inclusion_tag('home/detail_pedidos_caja.html',name='detail_pedidos_cajero_proceso',takes_context=True)
+def show_pedidos(context):
+	request=context['request']
+	recibido='proceso'
+	p = Cart.objects.raw('SELECT * FROM home_cart where active=0 and algo=%s',[recibido])
+	return{'pedidos':p}
+
+
+@register.inclusion_tag('home/detail_pedidos_cajero_enviados.html',name='detail_pedidos_cajero_enviados',takes_context=True)
+def show_pedidos(context):
+	request=context['request']
+	recibido='Enviado'
+	p = Cart.objects.raw('SELECT * FROM home_cart where active=0 and algo=%s',[recibido])
+	return{'pedidos':p}
+
+
+
 @register.inclusion_tag('home/detail_posts.html',name='detail_posts',takes_context=True)
 def show_post(context):
 	request=context['request']
 	u=str(request.user.id)
-	p = Direcciones.objects.raw('SELECT * FROM home_comentario where usuario_id=%s',[u])
+	p = Direcciones.objects.raw('SELECT * FROM home_comentario where home_comentario.parent_id is NULL and usuario_id=%s',[u])
 	return{'direcciones':p}
+
+@register.inclusion_tag('home/detail_posts_caja.html',name='detail_posts_caja',takes_context=True)
+def show_post(context):
+	request=context['request']
+	u=str(request.user.id)
+	p = Direcciones.objects.raw('SELECT * FROM home_comentario where home_comentario.parent_id is NULL')
+	return{'direcciones':p}
+
+@register.inclusion_tag('home/detail_repartidores_activos.html',name='detail_repartidores_activos',takes_context=True)
+def show_post(context):
+	request=context['request']
+	grupo='Repartidor'
+	p=User.objects.raw('SELECT * FROM auth_user join auth_user_groups on auth_user.id=user_id join auth_group on group_id=auth_group.id where auth_group.name=%s',[grupo])
+	context={
+	'repartidores':p
+	}
+	return{'repartidores':p}
+
+@register.inclusion_tag('home/detail_repartidores_no_disponibles.html',name='detail_repartidores_no_disponibles',takes_context=True)
+def show_post(context):
+	request=context['request']
+	grupo='Repartidor'
+	p=User.objects.raw('SELECT * FROM auth_user join auth_user_groups on auth_user.id=user_id join auth_group on group_id=auth_group.id where auth_group.name=%s',[grupo])
+	context={
+	'repartidores':p
+	}
+	return{'repartidores':p}
+
+
+@register.inclusion_tag('home/carts_asignados.html',name='carts_asignados',takes_context=True)
+def show_pedidos(context):
+	request=context['request']
+	q=caja_repartidor.objects.get(usuario=request.user)
+	recibido='Enviado'
+	p = Cart.objects.filter(caja=q,active=0,algo="Enviado")
+	return{'pedidos':p}

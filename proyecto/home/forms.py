@@ -88,6 +88,7 @@ class Direccion_form(forms.ModelForm):
 	class Meta:
 		model=Direcciones
 		fields=[
+		'alias',
 		'calle',
 		'numero_exterior',
 		'numero_interior',
@@ -105,7 +106,7 @@ class categoria_form(forms.ModelForm):
 				})
 	class Meta:
 		model=categoria
-		fields="__all__"
+		fields=['nombre','imagen']
 
 class tamano_form(forms.ModelForm):
 	def __init__(self,*args,**kwargs):
@@ -133,6 +134,7 @@ class menu_form(forms.ModelForm):
 		model=menu
 		fields=[
 		'articulo',
+		'descripcion',
 		'precio',
 		'imagen',
 		]

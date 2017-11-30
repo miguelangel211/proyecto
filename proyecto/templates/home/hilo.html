@@ -1,0 +1,93 @@
+{% extends 'base1.html' %}
+
+{% load forma %}
+
+
+{% block content %}
+
+
+
+
+	<div class="col-sm-4">
+	
+	</div>
+
+
+
+
+
+
+
+	<div class="panel-primary col-sm-4">
+
+		<div class="panel panel-heading" style="word-wrap: break-word;">
+		{{p.usuario.username}}:
+		</div>
+		<div class="panel panel-body">
+		<p>{{p.post}}</p>
+		</div>
+		<div class="panel panel-info">
+			publicado:{{p.timestamp}}	
+			<a  id="my-link" class='btn' href="#" >Respuestas : {{p.children.count}}</a>	
+		</div>
+		<div id="comentario" class="comment-reply" style="display: block">
+		{% for child_p in p.children %}
+			<blockquote>
+				
+				<p style="float: left">
+					
+				Por:	{{child_p.usuario.username}}
+				</p>
+					<br></br>
+				<p>
+					{{child_p.post}}
+				</p>
+				<footer style="float: right">
+					 {{child_p.timestamp}}
+				</footer>
+			</blockquote>
+		{% endfor %}
+		</div>
+		<button type="button" style="float: left" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal{{p.id}}">Responder</button>
+		<div id="myModal{{p.id}}" class="modal fade" role="dialog">
+		  <div class="modal-dialog">
+
+		    <!-- Modal content-->
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal">&times;</button>
+		        <h4 class="modal-title">Responder a {{p.usuario.username}}</h4>
+		      </div>
+		      <div class="modal-body" id="aqui">
+		   <form method="POST"  style="align-items: stretch;">
+				
+				{% csrf_token %}
+				{% for el in form %}
+					<div>
+						<label>{{ el.label_tag }}</label>
+					</div>
+					{{el}}
+				{% endfor %}
+					<input type="hidden" name='parent_id' value='{{p.id}}'>
+					<input type="hidden" name='form-type' value='formdos'>
+					<input type="submit" class="btn btn-success" value="responder">
+					<input type="reset" class="btn btn-success" name="Cancelar">
+			</form>
+		     </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		      </div>
+		    </div>
+
+		  </div>
+		</div>
+
+<div class="col-sm-4">
+	
+	</div>
+
+
+
+
+
+{% endblock %}
