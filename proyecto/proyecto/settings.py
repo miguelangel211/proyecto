@@ -25,7 +25,7 @@ SECRET_KEY = 'dfhr_7-)h_xxskuo#5tz#1wen%ana^vej%st!upkxkwu&sc*q&'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['mamispizza.pythonanywhere.com']
 
 
 # Application definition

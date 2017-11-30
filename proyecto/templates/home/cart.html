@@ -28,7 +28,7 @@
 			
 
 			{% if cart %}
-		<a href="{% url 'checkout' 'paypal' %}"><img src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif"></a>
+		<a class="btn btn-success btn-lg" href="{% url 'checkout' 'paypal' %}"><span class="fa fa-paypal"></span> Pagar con Paypal</a>
 
 			{% csrf_token %}
 			<a class="btn btn-success btn-lg" href="#" id="customButtton"><span class="glyphicon glyphicon-credit-card"></span> Pague con tarjeta
